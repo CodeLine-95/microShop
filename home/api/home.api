@@ -1,0 +1,61 @@
+syntax = "v1"
+
+info (
+	title: "microShop/home.api"
+	author: "jobhandsome"
+	version: "1.0.0"
+)
+
+type (
+	// banner
+	BannerReq    struct{}
+	BannerResply {
+		Code    int64         `json:"code"`
+		Message string        `json:"message"`
+		Data    []*BannerItem `json:"data"`
+	}
+	BannerItem {
+		ID     int64  `json:"id"`
+		Href   string `json:"href"`
+		Title  string `json:"title"`
+		Target string `json:"target"`
+		Pic    string `json:"pic"`
+	}
+
+	// 人气推荐
+	RecommendReq struct{}
+
+	// 排行榜
+	RankingListReq struct{}
+
+	// 统一返回
+	CommonResply {
+		Code    int64                     `json:"Code"`
+		Message string                    `json:"Message"`
+		Data    map[int]map[string]string `json:"Data"`
+	}
+)
+
+@server(
+	prefix: home
+)
+
+service home-api{
+	@doc (
+		summary: "首页Banner图"
+	)
+	@handler Banner
+	get /banner (BannerReq) returns (BannerResply)
+	
+	@doc (
+		summary: "人气推荐"
+	)
+	@handler Recommend
+	get /recommend (RecommendReq) returns (CommonResply)
+	
+	@doc (
+		summary: "排行榜"
+	)
+	@handler RankingList
+	get /ranking-list (RankingListReq) returns (CommonResply)
+}

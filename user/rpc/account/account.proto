@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package account;
+
+option go_package = "./account";
+
+message RegisterReq{
+  string UserName = 1;
+  string PassWord = 2;
+  string UserNick = 3;
+  string UserFace = 4;
+  int64 UserSex = 5;
+  string UserEmail = 6;
+}
+
+message LoginReq{
+  string UserName = 1;
+  string PassWord = 2;
+}
+
+message CommonResply{
+  int64 Code = 1;
+  string Message = 2;
+  string Data = 3;
+}
+
+message UserInfoReq{
+  string UserIdentity = 1;
+}
+
+service user{
+  rpc Register(RegisterReq) returns(CommonResply);
+  rpc Login(LoginReq) returns(CommonResply);
+  rpc UserInfo(UserInfoReq) returns (CommonResply);
+}

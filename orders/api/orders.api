@@ -1,0 +1,61 @@
+syntax = "v1"
+
+info (
+	title: "microShop/orders.api"
+	author: "jobhandsome"
+	version: "1.0.0"
+)
+
+type (
+	// 订单列表
+	OrdersListReq {
+		Page     int64 `json:"page"`
+		PageSize int64 `json:"pageSize"`
+	}
+
+	// 订单列表返回
+	OrdersListResply {
+		Code       int64                     `json:"Code"`
+		Message    string                    `json:"Message"`
+		Page       int64                     `json:"Page"`
+		PageSize   int64                     `json:"PageSize"`
+		TotalCount int64                     `json:"TotalCount"`
+		Data       map[int]map[string]string `json:"Data"`
+	}
+
+	// 订单详情
+	OrderReq {
+		OrderId int64 `json:"orderId"`
+	}
+	// 统一返回
+	CommonResply {
+		Code    int64                     `json:"Code"`
+		Message string                    `json:"Message"`
+		Data    map[int]map[string]string `json:"Data"`
+	}
+)
+
+@server(
+	prefix: orders
+)
+
+service orders-api{
+	@doc (
+		summary: "订单列表"
+	)
+	@handler OrderList
+	get /list (OrdersListReq) returns (OrdersListResply)
+	
+	@doc (
+		summary: "订单详情"
+	)
+	@handler OrderDetail
+	get /detail (OrderReq) returns (CommonResply)
+	
+	@doc (
+		summary: "订单物流"
+	)
+	@handler OrderLogistics
+	get /logistics (OrderReq) returns (CommonResply)
+	
+}

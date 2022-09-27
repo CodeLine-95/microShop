@@ -1,0 +1,68 @@
+syntax = "v1"
+
+info (
+	title: "microShop/product.api"
+	author: "jobhandsome"
+	version: "1.0.0"
+)
+
+type (
+	// 商品列表
+	ProductListReq {
+		Page        int64  `json:"page"`
+		PageSize    int64  `json:"pageSize"`
+		ProductName string `json:"productName"`
+	}
+
+	// 商品列表返回
+	ProductListResply {
+		Code       int64                     `json:"Code"`
+		Message    string                    `json:"Message"`
+		Page       int64                     `json:"Page"`
+		PageSize   int64                     `json:"PageSize"`
+		TotalCount int64                     `json:"TotalCount"`
+		Data       map[int]map[string]string `json:"Data"`
+	}
+
+	// 商品详情
+	ProductDetailReq {
+		PorductId int64 `json:"porductId"`
+	}
+
+	// 分类列表
+	CateListReq {
+		Pid int64 `json:"pid"`
+	}
+
+	// 统一返回
+	CommonResply {
+		Code    int64                     `json:"Code"`
+		Message string                    `json:"Message"`
+		Data    map[int]map[string]string `json:"Data"`
+	}
+)
+
+@server(
+	prefix: product
+)
+
+service product-api{
+	@doc (
+		summary: "商品列表"
+	)
+	@handler ProductList
+	get /list (ProductListReq) returns (ProductListResply)
+	
+	@doc (
+		summary: "商品详情"
+	)
+	@handler ProductDetail
+	get /detail (ProductDetailReq) returns (CommonResply)
+	
+	@doc (
+		summary: "分类列表"
+	)
+	@handler cateList
+	get /cate-list (CateListReq) returns (CommonResply)
+	
+}

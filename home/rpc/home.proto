@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package home;
+
+option go_package = "./home";
+
+message BannerReq{}
+message RecommendReq{}
+message RankingListReq{}
+
+message CommonResply{
+  int64 Code = 1;
+  string Message = 2;
+  string Data = 3;
+}
+
+service home{
+  rpc Banner(BannerReq) returns(CommonResply);
+  rpc Recommend(RecommendReq) returns(CommonResply);
+  rpc RankingList(RankingListReq) returns(CommonResply);
+}

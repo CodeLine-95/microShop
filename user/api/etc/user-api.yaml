@@ -1,0 +1,31 @@
+# user 模块配置
+Name: user-api
+Host: 0.0.0.0
+Port: 9001
+SecretKey: C8xHnG6s
+# mysql配置
+Mysql:
+  Host: 127.0.0.1:3306
+  User: root
+  Pass: !!str 123456
+  Data: user
+  Charset: utf8mb4
+# redis 配置
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Pass:
+    Type: node
+BizRedis:
+  Host: 127.0.0.1:6379
+  Pass:
+  Type: node
+
+Auth:
+  AccessSecret: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+  AccessExpire: 64800
+
+Rpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: account.rpc
