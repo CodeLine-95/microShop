@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"microShop/comm/errorx"
 	"microShop/user/api/internal/svc"
 	"microShop/user/api/internal/types"
 	"microShop/user/rpc/account/types/account"
@@ -39,7 +40,7 @@ func (l *UserInfoLogic) UserInfo(req types.UserInfoReq) (resp *types.UserInfoRes
 
 	userJsonErr := json.Unmarshal([]byte(userData.Data), &userInfoItem)
 	if userJsonErr != nil {
-		return nil, userJsonErr
+		return nil, errorx.NewDefaultError("数据转换失败")
 	}
 	return &types.UserInfoResply{
 		Code:    http.StatusOK,
