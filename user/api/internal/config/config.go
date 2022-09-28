@@ -21,4 +21,9 @@ type Config struct {
 	BizRedis   redis.RedisConf
 
 	Rpc zrpc.RpcClientConf
+
+	Auth struct {
+		AccessSecret string
+		AccessExpire int64
+	}
 }

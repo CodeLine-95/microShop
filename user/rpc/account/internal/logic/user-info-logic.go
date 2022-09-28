@@ -2,7 +2,9 @@ package logic
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"net/http"
 
 	"microShop/user/rpc/account/internal/svc"
 	"microShop/user/rpc/account/types/account"
@@ -30,5 +32,14 @@ func (l *UserInfoLogic) UserInfo(in *account.UserInfoReq) (*account.CommonResply
 	if userData == nil {
 		return nil, errors.New("找不到该用户")
 	}
-	return &account.CommonResply{}, nil
+
+	userJsonData, JsonErr := json.Marshal(userData)
+	if JsonErr != nil {
+		return nil, errors.New("数据转换失败")
+	}
+	return &account.CommonResply{
+		Code:    http.StatusOK,
+		Message: "获取成功",
+		Data:    string(userJsonData),
+	}, nil
 }

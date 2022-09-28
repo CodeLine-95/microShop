@@ -2,15 +2,14 @@ package logic
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/zeromicro/go-zero/core/logx"
 	"microShop/comm"
 	"microShop/user/rpc/account/internal/svc"
 	"microShop/user/rpc/account/model"
 	"microShop/user/rpc/account/types/account"
-	"time"
-
-	"github.com/zeromicro/go-zero/core/logx"
+	"net/http"
 )
 
 type LoginLogic struct {
@@ -63,32 +62,14 @@ func (l *LoginLogic) Login(in *account.LoginReq) (*account.CommonResply, error) 
 		return nil, cntErr
 	}
 
-	// jwt
-	payloads := make(map[string]any)
-	payloads["userId"] = userData.Id
-
-	accessToken, tokenErr := l.GetToken(time.Now().Unix(), l.svcCtx.Config.JwtAuth.AccessSecret, payloads, l.svcCtx.Config.JwtAuth.AccessExpire)
-	if tokenErr != nil {
-		return nil, tokenErr
+	userJsonData, jsonErr := json.Marshal(userData)
+	if jsonErr != nil {
+		return nil, jsonErr
 	}
 
 	return &account.CommonResply{
-		Code:    0,
+		Code:    http.StatusOK,
 		Message: "登录成功",
-		Data:    accessToken,
+		Data:    string(userJsonData),
 	}, nil
-}
-
-func (l *LoginLogic) GetToken(iat int64, secretKey string, payloads map[string]any, seconds int64) (string, error) {
-	claims := make(jwt.MapClaims)
-	claims["expTime"] = iat + seconds
-	claims["iat"] = iat
-	for k, v := range payloads {
-		claims[k] = v
-	}
-
-	token := jwt.New(jwt.SigningMethodHS256)
-	token.Claims = claims
-
-	return token.SignedString([]byte(secretKey))
 }
