@@ -1,0 +1,77 @@
+syntax = "v1"
+
+info (
+	title: "microShop/user.api"
+	author: "jobhandsome"
+	version: "1.0.0"
+)
+
+type (
+	RegisterReq {
+		UserName  string `json:"UserName"`  // 用户名
+		PassWord  string `json:"PassWord"`  // 用户密码，MD5加密
+		UserNick  string `json:"UserNick"`  // 用户昵称
+		UserFace  string `json:"UserFace"`  // 用户头像地址
+		UserSex   int64  `json:"UserSex"`   // 用户性别：0男，1女，2保密
+		UserEmail string `json:"UserEmail"` // 用户邮箱
+	}
+
+	LoginReq {
+		UserName string `json:"UserName"` // 用户名
+		PassWord string `json:"PassWord"` // 用户密码，MD5加密
+	}
+
+	UserInfoReq struct{}
+
+	UserInfoResply {
+		Code    int64         `json:"Code"`
+		Message string        `json:"Message"`
+		Data    *UserInfoItem `json:"Data"`
+	}
+
+	UserInfoItem {
+		UserIdentity string `json:"UserIdentity"` // 用户唯一表哦是
+		UserName     string `json:"UserName"`     // 用户名
+		UserNick     string `json:"UserNick"`     // 用户昵称
+		UserFace     string `json:"UserFace"`     // 用户头像地址
+		UserSex      int64  `json:"UserSex"`      // 用户性别：0男，1女，2保密
+		UserEmail    string `json:"UserEmail"`    // 用户邮箱
+		UserPhone    string `json:"UserPhone"`    // 用户手机号
+	}
+
+	CommonResply {
+		Code    int64  `json:"Code"`
+		Message string `json:"Message"`
+		Data    string `json:"Data"`
+	}
+)
+
+@server(
+	prefix: account
+)
+
+service user-api{
+	@doc (
+		summary: "用户注册"
+	)
+	@handler Register
+	post /register (RegisterReq) returns (CommonResply)
+	
+	@doc (
+		summary: "用户登录"
+	)
+	@handler Login
+	post /login (LoginReq) returns (CommonResply)
+}
+
+@server(
+	jwt: Auth
+)
+
+service user-api{
+	@doc (
+		summary: "用户信息"
+	)
+	@handler userInfo
+	post /userinfo (UserInfoReq) returns (UserInfoResply)
+}
