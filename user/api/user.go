@@ -3,13 +3,16 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net/http"
 
+	"microShop/comm/errorx"
 	"microShop/user/api/internal/config"
 	"microShop/user/api/internal/handler"
 	"microShop/user/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 var configFile = flag.String("f", "etc/user-api.yaml", "the config file")
@@ -25,6 +28,16 @@ func main() {
 	defer server.Stop()
 
 	handler.RegisterHandlers(server, ctx)
+
+	// 自定义错误
+	httpx.SetErrorHandler(func(err error) (int, interface{}) {
+		switch e := err.(type) {
+		case *errorx.CodeError:
+			return http.StatusOK, e.Data()
+		default:
+			return http.StatusInternalServerError, nil
+		}
+	})
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
