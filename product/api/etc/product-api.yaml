@@ -1,3 +1,25 @@
 Name: product-api
 Host: 0.0.0.0
-Port: 8888
+Port: 9003
+
+# mysql配置
+Mysql:
+  Host: 127.0.0.1:3306
+  User: root
+  Pass: !!str 123456
+  Data: product
+  Charset: utf8mb4
+# redis 配置
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Pass:
+    Type: node
+BizRedis:
+  Host: 127.0.0.1:6379
+  Pass:
+  Type: node
+Rpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: product.rpc

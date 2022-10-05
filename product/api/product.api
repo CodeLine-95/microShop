@@ -31,7 +31,20 @@ type (
 
 	// 分类列表
 	CateListReq {
-		Pid int64 `json:"pid"`
+		Pid int64 `json:"Pid"`
+	}
+
+	CategoryResply {
+		Code    int64           `json:"Code"`
+		Message string          `json:"Message"`
+		Data    []*CategoryItem `json:"Data"`
+	}
+
+	CategoryItem {
+		ID       int64  `json:"Id"`
+		ParentId int64  `json:"ParentId"`
+		Name     string `json:"Name"`
+		Status   int64  `json:"Status"`
 	}
 
 	// 统一返回
@@ -63,6 +76,6 @@ service product-api{
 		summary: "分类列表"
 	)
 	@handler cateList
-	get /cate-list (CateListReq) returns (CommonResply)
+	post /cate-list (CateListReq) returns (CategoryResply)
 	
 }

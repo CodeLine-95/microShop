@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package product;
+
+option go_package = "./product";
+
+message GetProductsReq {
+  int64 Page = 1;
+  int64 PageSize = 2;
+  string Search = 3;
+}
+
+message GetCateoryReq {
+  int64 Pid = 1;
+}
+
+message CommonResply{
+  int64 Code = 1;
+  string Message = 2;
+  string Data = 3;
+}
+
+service product{
+  rpc Products (GetProductsReq) returns (CommonResply);
+  rpc Category (GetCateoryReq) returns (CommonResply);
+}

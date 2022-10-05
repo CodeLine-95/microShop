@@ -62,7 +62,7 @@ func (m *defaultBannerModel) Delete(ctx context.Context, id uint64) error {
 }
 
 func (m *defaultBannerModel) FindAll(ctx context.Context, orderBy string) ([]Banner, error) {
-	query := fmt.Sprintf("select %s from %s order by createTimeTamp %s limit 1", bannerRows, m.table, orderBy)
+	query := fmt.Sprintf("select %s from %s order by createTimeTamp %s", bannerRows, m.table, orderBy)
 	var resp []Banner
 	err := m.conn.QueryRowsCtx(ctx, &resp, query)
 	switch err {

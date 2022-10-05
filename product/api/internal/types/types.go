@@ -21,7 +21,20 @@ type ProductDetailReq struct {
 }
 
 type CateListReq struct {
-	Pid int64 `json:"pid"`
+	Pid int64 `json:"Pid"`
+}
+
+type CategoryResply struct {
+	Code    int64           `json:"Code"`
+	Message string          `json:"Message"`
+	Data    []*CategoryItem `json:"Data"`
+}
+
+type CategoryItem struct {
+	ID       int64  `json:"Id"`
+	ParentId int64  `json:"ParentId"`
+	Name     string `json:"Name"`
+	Status   int64  `json:"Status"`
 }
 
 type CommonResply struct {
