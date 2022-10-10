@@ -7,26 +7,56 @@ info (
 )
 
 type (
+
+	// 推荐产品列表
+	RecommendReq struct{}
+
+	RecommendResply {
+		Code    int64          `json:"Code"`
+		Message string         `json:"Message"`
+		Data    []*ProductItem `json:"Data"`
+	}
+
 	// 商品列表
-	ProductListReq {
+	ProductsReq {
 		Page        int64  `json:"page"`
 		PageSize    int64  `json:"pageSize"`
 		ProductName string `json:"productName"`
 	}
 
 	// 商品列表返回
-	ProductListResply {
-		Code       int64                     `json:"Code"`
-		Message    string                    `json:"Message"`
-		Page       int64                     `json:"Page"`
-		PageSize   int64                     `json:"PageSize"`
-		TotalCount int64                     `json:"TotalCount"`
-		Data       map[int]map[string]string `json:"Data"`
+	ProductsResply {
+		Code       int64          `json:"Code"`
+		Message    string         `json:"Message"`
+		Page       int64          `json:"Page"`
+		PageSize   int64          `json:"PageSize"`
+		TotalCount int64          `json:"TotalCount"`
+		Data       []*ProductItem `json:"Data"`
+	}
+
+	ProductItem {
+		ID          int64   `json:"id"`
+		Title       string  `json:"title"`
+		CoverPic    string  `json:"coverPic"`
+		Property    string  `json:"property"`
+		MtPrice     float64 `json:"mtPrice"`
+		DisPrice    float64 `json:"disPrice"`
+		Stock       int64   `json:"stock"`
+		State       int64   `json:"state"`
+		SalesVolume int64   `json:"salesVolume"`
+		Images      string  `json:"images"`
+		Detail      string  `json:"detail"`
 	}
 
 	// 商品详情
-	ProductDetailReq {
+	DetailReq {
 		PorductId int64 `json:"porductId"`
+	}
+
+	DetailResply {
+		Code    int64       `json:"Code"`
+		Message string      `json:"Message"`
+		Data    ProductItem `json:"Data"`
 	}
 
 	// 分类列表
@@ -46,13 +76,6 @@ type (
 		Name     string `json:"Name"`
 		Status   int64  `json:"Status"`
 	}
-
-	// 统一返回
-	CommonResply {
-		Code    int64                     `json:"Code"`
-		Message string                    `json:"Message"`
-		Data    map[int]map[string]string `json:"Data"`
-	}
 )
 
 @server(
@@ -61,16 +84,22 @@ type (
 
 service product-api{
 	@doc (
+		summary: "推荐商品列表"
+	)
+	@handler Recommend
+	post /recommend (RecommendReq) returns (RecommendResply)
+	
+	@doc (
 		summary: "商品列表"
 	)
 	@handler ProductList
-	get /list (ProductListReq) returns (ProductListResply)
+	post /list (ProductsReq) returns (ProductsResply)
 	
 	@doc (
 		summary: "商品详情"
 	)
 	@handler ProductDetail
-	get /detail (ProductDetailReq) returns (CommonResply)
+	post /detail (DetailReq) returns (DetailResply)
 	
 	@doc (
 		summary: "分类列表"

@@ -13,12 +13,17 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
-				Method:  http.MethodGet,
+				Method:  http.MethodPost,
+				Path:    "/recommend",
+				Handler: RecommendHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
 				Path:    "/list",
 				Handler: ProductListHandler(serverCtx),
 			},
 			{
-				Method:  http.MethodGet,
+				Method:  http.MethodPost,
 				Path:    "/detail",
 				Handler: ProductDetailHandler(serverCtx),
 			},

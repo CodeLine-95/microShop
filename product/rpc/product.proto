@@ -10,6 +10,10 @@ message GetProductsReq {
   string Search = 3;
 }
 
+message ProductReq {
+  string productIds = 1;
+}
+
 message GetCateoryReq {
   int64 Pid = 1;
 }
@@ -22,5 +26,6 @@ message CommonResply{
 
 service product{
   rpc Products (GetProductsReq) returns (CommonResply);
+  rpc Product (ProductReq) returns (CommonResply);
   rpc Category (GetCateoryReq) returns (CommonResply);
 }

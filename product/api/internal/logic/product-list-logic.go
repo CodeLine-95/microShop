@@ -23,7 +23,7 @@ func NewProductListLogic(ctx context.Context, svcCtx *svc.ServiceContext) Produc
 	}
 }
 
-func (l *ProductListLogic) ProductList(req types.ProductListReq) (resp *types.ProductListResply, err error) {
+func (l *ProductListLogic) ProductList(req types.ProductsReq) (resp *types.ProductsResply, err error) {
 	// todo: add your logic here and delete this line
 
 	return

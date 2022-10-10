@@ -10,9 +10,27 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
+func RecommendHandler(ctx *svc.ServiceContext) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var req types.RecommendReq
+		if err := httpx.Parse(r, &req); err != nil {
+			httpx.Error(w, err)
+			return
+		}
+
+		l := logic.NewRecommendLogic(r.Context(), ctx)
+		resp, err := l.Recommend(req)
+		if err != nil {
+			httpx.Error(w, err)
+		} else {
+			httpx.OkJson(w, resp)
+		}
+	}
+}
+
 func ProductListHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.ProductListReq
+		var req types.ProductsReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return
@@ -30,7 +48,7 @@ func ProductListHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 
 func ProductDetailHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.ProductDetailReq
+		var req types.DetailReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return

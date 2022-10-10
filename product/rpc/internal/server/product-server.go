@@ -27,6 +27,11 @@ func (s *ProductServer) Products(ctx context.Context, in *product.GetProductsReq
 	return l.Products(in)
 }
 
+func (s *ProductServer) Product(ctx context.Context, in *product.ProductReq) (*product.CommonResply, error) {
+	l := logic.NewProductLogic(ctx, s.svcCtx)
+	return l.Product(in)
+}
+
 func (s *ProductServer) Category(ctx context.Context, in *product.GetCateoryReq) (*product.CommonResply, error) {
 	l := logic.NewCategoryLogic(ctx, s.svcCtx)
 	return l.Category(in)

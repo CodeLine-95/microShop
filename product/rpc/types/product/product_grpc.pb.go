@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProductClient interface {
 	Products(ctx context.Context, in *GetProductsReq, opts ...grpc.CallOption) (*CommonResply, error)
+	Product(ctx context.Context, in *ProductReq, opts ...grpc.CallOption) (*CommonResply, error)
 	Category(ctx context.Context, in *GetCateoryReq, opts ...grpc.CallOption) (*CommonResply, error)
 }
 
@@ -43,6 +44,15 @@ func (c *productClient) Products(ctx context.Context, in *GetProductsReq, opts .
 	return out, nil
 }
 
+func (c *productClient) Product(ctx context.Context, in *ProductReq, opts ...grpc.CallOption) (*CommonResply, error) {
+	out := new(CommonResply)
+	err := c.cc.Invoke(ctx, "/product.product/Product", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *productClient) Category(ctx context.Context, in *GetCateoryReq, opts ...grpc.CallOption) (*CommonResply, error) {
 	out := new(CommonResply)
 	err := c.cc.Invoke(ctx, "/product.product/Category", in, out, opts...)
@@ -57,6 +67,7 @@ func (c *productClient) Category(ctx context.Context, in *GetCateoryReq, opts ..
 // for forward compatibility
 type ProductServer interface {
 	Products(context.Context, *GetProductsReq) (*CommonResply, error)
+	Product(context.Context, *ProductReq) (*CommonResply, error)
 	Category(context.Context, *GetCateoryReq) (*CommonResply, error)
 	mustEmbedUnimplementedProductServer()
 }
@@ -67,6 +78,9 @@ type UnimplementedProductServer struct {
 
 func (UnimplementedProductServer) Products(context.Context, *GetProductsReq) (*CommonResply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Products not implemented")
+}
+func (UnimplementedProductServer) Product(context.Context, *ProductReq) (*CommonResply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Product not implemented")
 }
 func (UnimplementedProductServer) Category(context.Context, *GetCateoryReq) (*CommonResply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Category not implemented")
@@ -102,6 +116,24 @@ func _Product_Products_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Product_Product_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProductReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServer).Product(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.product/Product",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServer).Product(ctx, req.(*ProductReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Product_Category_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetCateoryReq)
 	if err := dec(in); err != nil {
@@ -130,6 +162,10 @@ var Product_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Products",
 			Handler:    _Product_Products_Handler,
+		},
+		{
+			MethodName: "Product",
+			Handler:    _Product_Product_Handler,
 		},
 		{
 			MethodName: "Category",

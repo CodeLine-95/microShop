@@ -25,6 +25,8 @@ var (
 type (
 	productModel interface {
 		Insert(ctx context.Context, data *Product) (sql.Result, error)
+		FindAll(ctx context.Context, orderBy string) ([]Product, error)
+		FindIdsAll(ctx context.Context, ids string) ([]Product, error)
 		FindOne(ctx context.Context, id uint64) (*Product, error)
 		Update(ctx context.Context, data *Product) error
 		Delete(ctx context.Context, id uint64) error
@@ -64,6 +66,34 @@ func (m *defaultProductModel) Delete(ctx context.Context, id uint64) error {
 	query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
 	_, err := m.conn.ExecCtx(ctx, query, id)
 	return err
+}
+
+func (m *defaultProductModel) FindAll(ctx context.Context, orderBy string) ([]Product, error) {
+	query := fmt.Sprintf("select %s from %s order by create_time %s", productRows, m.table)
+	var resp []Product
+	err := m.conn.QueryRowsCtx(ctx, &resp, query, orderBy)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *defaultProductModel) FindIdsAll(ctx context.Context, ids string) ([]Product, error) {
+	query := fmt.Sprintf("select %s from %s where id in (%s)", productRows, m.table, ids)
+	var resp []Product
+	err := m.conn.QueryRowsCtx(ctx, &resp, query)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
 }
 
 func (m *defaultProductModel) FindOne(ctx context.Context, id uint64) (*Product, error) {

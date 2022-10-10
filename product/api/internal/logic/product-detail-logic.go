@@ -23,7 +23,7 @@ func NewProductDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) Prod
 	}
 }
 
-func (l *ProductDetailLogic) ProductDetail(req types.ProductDetailReq) (resp *types.CommonResply, err error) {
+func (l *ProductDetailLogic) ProductDetail(req types.DetailReq) (resp *types.DetailResply, err error) {
 	// todo: add your logic here and delete this line
 
 	return
