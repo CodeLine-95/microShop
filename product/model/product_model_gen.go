@@ -95,10 +95,10 @@ func (m *defaultProductModel) FindPaginations(ctx context.Context, where string,
 	var err error
 	offset := (page - 1) * pageSize
 	if len(where) == 0 {
-		query := fmt.Sprintf("select %s from %s order by create_time desc limit %d,%d", productRows, m.table)
+		query := fmt.Sprintf("select %s from %s order by create_time desc limit ?,?", productRows, m.table)
 		err = m.conn.QueryRowsCtx(ctx, &resp, query, offset, pageSize)
 	} else {
-		query := fmt.Sprintf("select %s from %s where %s order by create_time desc limit %d,%d", productRows, m.table)
+		query := fmt.Sprintf("select %s from %s where ? order by create_time desc limit ?,?", productRows, m.table)
 		err = m.conn.QueryRowsCtx(ctx, &resp, query, where, offset, pageSize)
 	}
 	switch err {
