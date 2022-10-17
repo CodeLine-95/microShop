@@ -41,6 +41,9 @@ func (l *RecommendLogic) Recommend(req types.RecommendReq) (resp *types.Recommen
 		ProductIds = ProductIds + strconv.FormatUint(v.ProductId, 10) + ","
 	}
 	ProductIds = strings.TrimRight(ProductIds, ",")
+	if len(ProductIds) == 0 {
+		return nil, errorx.NewDefaultError("暂无推荐商品")
+	}
 	// 传入推荐表中处理的商品ID，获取指定ID的商品
 	cnt, cntErr := l.svcCtx.Rpc.Product(l.ctx, &product.ProductReq{ProductIds: ProductIds})
 	if cntErr != nil {

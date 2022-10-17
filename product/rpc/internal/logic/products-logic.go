@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"encoding/json"
 
 	"microShop/product/rpc/internal/svc"
 	"microShop/product/rpc/types/product"
@@ -26,5 +27,16 @@ func NewProductsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Products
 func (l *ProductsLogic) Products(in *product.GetProductsReq) (*product.CommonResply, error) {
 	// todo: add your logic here and delete this line
 
-	return &product.CommonResply{}, nil
+	res, err := l.svcCtx.Product.FindPaginations(l.ctx, in.Search, in.Page, in.PageSize)
+	if err != nil {
+		return nil, err
+	}
+
+	jsonRes, _ := json.Marshal(res)
+
+	return &product.CommonResply{
+		Code:    200,
+		Message: "成功",
+		Data:    string(jsonRes),
+	}, nil
 }
