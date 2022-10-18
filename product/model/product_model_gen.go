@@ -72,13 +72,13 @@ func (m *defaultProductModel) Delete(ctx context.Context, id uint64) error {
 func (m *defaultProductModel) FindAll(ctx context.Context, where string) ([]Product, error) {
 	var resp []Product
 	var err error
+	var query string
 	if len(where) == 0 {
-		query := fmt.Sprintf("select %s from %s order by create_time desc", productRows, m.table)
-		err = m.conn.QueryRowsCtx(ctx, &resp, query)
+		query = fmt.Sprintf("select %s from %s order by create_time desc", productRows, m.table)
 	} else {
-		query := fmt.Sprintf("select %s from %s where %s order by create_time desc", productRows, m.table)
-		err = m.conn.QueryRowsCtx(ctx, &resp, query, where)
+		query = fmt.Sprintf("select %s from %s where %s order by create_time desc", productRows, m.table, where)
 	}
+	err = m.conn.QueryRowsCtx(ctx, &resp, query)
 	switch err {
 	case nil:
 		return resp, nil
