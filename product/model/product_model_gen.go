@@ -26,7 +26,7 @@ type (
 	productModel interface {
 		Insert(ctx context.Context, data *Product) (sql.Result, error)
 		FindAll(ctx context.Context, orderBy string) ([]Product, error)
-		FindPaginations(ctx context.Context, where string, page, pageSize int64) ([]Product, error)
+		FindPaginations(ctx context.Context, where string, Page, PageSize int64) ([]Product, error)
 		FindIdsAll(ctx context.Context, ids string) ([]Product, error)
 		FindOne(ctx context.Context, id uint64) (*Product, error)
 		Update(ctx context.Context, data *Product) error
@@ -90,16 +90,17 @@ func (m *defaultProductModel) FindAll(ctx context.Context, where string) ([]Prod
 }
 
 // pagination
-func (m *defaultProductModel) FindPaginations(ctx context.Context, where string, page, pageSize int64) ([]Product, error) {
+func (m *defaultProductModel) FindPaginations(ctx context.Context, where string, Page, PageSize int64) ([]Product, error) {
 	var resp []Product
 	var err error
-	offset := (page - 1) * pageSize
+	offset := (Page - 1) * PageSize
 	if len(where) == 0 {
 		query := fmt.Sprintf("select %s from %s order by create_time desc limit ?,?", productRows, m.table)
-		err = m.conn.QueryRowsCtx(ctx, &resp, query, offset, pageSize)
+		err = m.conn.QueryRowsCtx(ctx, &resp, query, offset, PageSize)
 	} else {
-		query := fmt.Sprintf("select %s from %s where ? order by create_time desc limit ?,?", productRows, m.table)
-		err = m.conn.QueryRowsCtx(ctx, &resp, query, where, offset, pageSize)
+		query := fmt.Sprintf("select %s from %s where %s order by create_time desc limit ?,?", productRows, m.table, where)
+		fmt.Println(query)
+		err = m.conn.QueryRowsCtx(ctx, &resp, query, offset, PageSize)
 	}
 	switch err {
 	case nil:

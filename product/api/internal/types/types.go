@@ -11,9 +11,11 @@ type RecommendResply struct {
 }
 
 type ProductsReq struct {
-	Page        int64  `json:"page"`
-	PageSize    int64  `json:"pageSize"`
-	ProductName string `json:"productName"`
+	Page        int64  `json:"Page"`
+	PageSize    int64  `json:"PageSize"`
+	ProductName string `json:"ProductName"`
+	State       int64  `json:"State"`
+	SearchTime  string `json:"SearchTime"`
 }
 
 type ProductsResply struct {
