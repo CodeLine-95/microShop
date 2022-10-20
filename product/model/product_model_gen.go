@@ -27,7 +27,6 @@ type (
 		Insert(ctx context.Context, data *Product) (sql.Result, error)
 		FindAll(ctx context.Context, orderBy string) ([]Product, error)
 		FindPaginations(ctx context.Context, where string, Page, PageSize int64) ([]Product, error)
-		FindIdsAll(ctx context.Context, ids string) ([]Product, error)
 		FindOne(ctx context.Context, id uint64) (*Product, error)
 		Update(ctx context.Context, data *Product) error
 		Delete(ctx context.Context, id uint64) error
@@ -101,20 +100,6 @@ func (m *defaultProductModel) FindPaginations(ctx context.Context, where string,
 		query := fmt.Sprintf("select %s from %s where %s order by create_time desc limit ?,?", productRows, m.table, where)
 		err = m.conn.QueryRowsCtx(ctx, &resp, query, offset, PageSize)
 	}
-	switch err {
-	case nil:
-		return resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
-	}
-}
-
-func (m *defaultProductModel) FindIdsAll(ctx context.Context, ids string) ([]Product, error) {
-	query := fmt.Sprintf("select %s from %s where id in (%s)", productRows, m.table, ids)
-	var resp []Product
-	err := m.conn.QueryRowsCtx(ctx, &resp, query)
 	switch err {
 	case nil:
 		return resp, nil

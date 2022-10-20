@@ -39,6 +39,8 @@ type ProductItem struct {
 	SalesVolume int64   `json:"salesVolume"`
 	Images      string  `json:"images"`
 	Detail      string  `json:"detail"`
+	CreateTime  string  `json:"createTime"`
+	UpdateTime  string  `json:"updateTime"`
 }
 
 type DetailReq struct {

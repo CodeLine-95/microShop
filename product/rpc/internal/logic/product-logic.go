@@ -25,7 +25,7 @@ func NewProductLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ProductLo
 
 func (l *ProductLogic) Product(in *product.ProductReq) (*product.CommonResply, error) {
 
-	res, err := l.svcCtx.Product.FindIdsAll(l.ctx, in.ProductIds)
+	res, err := l.svcCtx.Product.FindOne(l.ctx, uint64(in.ProductId))
 
 	if err != nil {
 		return nil, err

@@ -11,7 +11,7 @@ message GetProductsReq {
 }
 
 message ProductReq {
-  string productIds = 1;
+  int64 productId = 1;
 }
 
 message GetCateoryReq {
