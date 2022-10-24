@@ -54,7 +54,7 @@ type (
 
 	// 商品详情
 	DetailReq {
-		PorductId int64 `json:"porductId"`
+		PorductId int64 `json:"PorductId"`
 	}
 
 	DetailResply {

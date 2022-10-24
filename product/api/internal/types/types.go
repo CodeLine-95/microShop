@@ -44,7 +44,7 @@ type ProductItem struct {
 }
 
 type DetailReq struct {
-	PorductId int64 `json:"porductId"`
+	PorductId int64 `json:"PorductId"`
 }
 
 type DetailResply struct {
