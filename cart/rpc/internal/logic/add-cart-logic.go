@@ -2,12 +2,10 @@ package logic
 
 import (
 	"context"
-	"encoding/json"
+	"github.com/zeromicro/go-zero/core/logx"
 	"microShop/cart/model"
 	"microShop/cart/rpc/internal/svc"
 	"microShop/cart/rpc/types/cart"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type AddCartLogic struct {
@@ -34,10 +32,15 @@ func (l *AddCartLogic) AddCart(in *cart.AddCartReq) (*cart.CommonResply, error) 
 	if err != nil {
 		return nil, err
 	}
-	jsonRes, _ := json.Marshal(res)
-	return &cart.CommonResply{
-		Code:    200,
-		Message: "成功",
-		Data:    string(jsonRes),
-	}, nil
+
+	var commonResp cart.CommonResply
+
+	commonResp.Code = 200
+	commonResp.Message = "成功"
+
+	if cnt, _ := res.RowsAffected(); cnt == 0 {
+		commonResp.Code = 400
+		commonResp.Message = "失败"
+	}
+	return &commonResp, nil
 }

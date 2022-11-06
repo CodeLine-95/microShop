@@ -10,7 +10,7 @@ Mysql:
   Host: 127.0.0.1:3306
   User: root
   Pass: !!str 123456
-  Data: product
+  Data: cart
   Charset: utf8mb4
 
 Cache:
