@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package cart;
+
+option go_package = "./cart";
+
+message AddCartReq {
+  int64 UserId = 1;
+  int64 productId = 2;
+  int64 buyCount = 3;
+  int64 checked = 4;
+}
+
+message EditCartReq {
+  int64 id = 1;
+  int64 productId = 2;
+  int64 buyCount = 3;
+  int64 checked = 4;
+}
+
+message DelCartReq {
+  string ids = 1;
+}
+
+message CommonResply{
+  int64 Code = 1;
+  string Message = 2;
+  string Data = 3;
+}
+
+service cart{
+  rpc AddCart (AddCartReq) returns (CommonResply);
+  rpc EditCart (EditCartReq) returns (CommonResply);
+  rpc DelCart (DelCartReq) returns (CommonResply);
+}

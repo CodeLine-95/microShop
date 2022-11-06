@@ -6,7 +6,7 @@ import (
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/zrpc"
 	"microShop/user/api/internal/config"
-	"microShop/user/api/model"
+	"microShop/user/model"
 	"microShop/user/rpc/account/user"
 	"net/url"
 )
