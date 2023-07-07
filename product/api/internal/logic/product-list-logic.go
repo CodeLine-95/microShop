@@ -61,18 +61,18 @@ func (l *ProductListLogic) ProductList(req types.ProductsReq) (resp *types.Produ
 		return nil, errorx.NewDefaultError(jsonErr.Error())
 	}
 
-	productsData, productsDataErr := mr.MapReduce(func(source chan<- interface{}) {
+	productsData, productsDataErr := mr.MapReduce(func(source chan<- any) {
 		// 这里是 generate | 将列表的下标值记录到 chan
 		// 传入到 mapper
 		for key := range products {
 			source <- key
 		}
-	}, func(item interface{}, writer mr.Writer, cancel func(error)) {
+	}, func(item any, writer mr.Writer[any], cancel func(error)) {
 		// 这里是 mapper | 处理存入的 chan
 		key := item.(int)
 		// 写入到 reducer
 		writer.Write(key)
-	}, func(pipe <-chan interface{}, writer mr.Writer, cancel func(error)) {
+	}, func(pipe <-chan any, writer mr.Writer[any], cancel func(error)) {
 		// 处理 reducer | 对 mapper 进行数据聚合
 		productsData := []types.ProductItem{}
 		productsDataMap := []any{}
